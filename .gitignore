@@ -6,6 +6,6 @@ x86/
 bin/
 obj/
 packages/
-
 # Visual Studio 2022 cache/options directory
 .vs/
+**/*.csproj.user

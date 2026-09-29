@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Калькулятор";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Калькулятор</h1>
+
+    <form asp-controller="Calculator"
+          asp-action="Calculate"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label for="num1">Первое число:</label>
+            <input type="number"
+                   step="any"
+                   name="num1"
+                   id="num1"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="operation">Операция:</label>
+            <select name="operation"
+                    id="operation"
+                    class="form-select">
+
+                <option value="add">Сложение (+)</option>
+                <option value="subtract">Вычитание (-)</option>
+                <option value="multiply">Умножение (×)</option>
+                <option value="divide">Деление (÷)</option>
+
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="num2">Второе число:</label>
+            <input type="number"
+                   step="any"
+                   name="num2"
+                   id="num2"
+                   class="form-control"
+                   required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Рассчитать
+        </button>
+    </form>
+
+    @if (ViewBag.Result != null)
+    {
+        <div class="alert alert-success mt-4">
+            <strong>Результат:</strong> @ViewBag.Result
+        </div>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger mt-4">
+            @ViewBag.Error
+        </div>
+    }
+</div>
