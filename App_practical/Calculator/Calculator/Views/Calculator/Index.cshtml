@@ -2,98 +2,277 @@
     ViewData["Title"] = "Калькулятор";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Калькулятор</h1>
-
-    <form asp-controller="Calculator"
-          asp-action="Calculate"
-          method="post">
-
-        @Html.AntiForgeryToken()
-
-        <div class="mb-3">
-            <label for="num1">Первое число:</label>
-            <input type="number"
-                   step="any"
-                   name="num1"
-                   id="num1"
-                   class="form-control"
-                   value="@ViewBag.Num1"
-                   required />
-        </div>
-
-        <div class="mb-3">
-            <label for="operation">Операция:</label>
-            <select name="operation"
-                    id="operation"
-                    class="form-select">
-
-                @if (ViewBag.Operation == "add")
-                {
-                    <option value="add" selected>Сложение (+)</option>
-                }
-                else
-                {
-                    <option value="add">Сложение (+)</option>
-                }
-
-                @if (ViewBag.Operation == "subtract")
-                {
-                    <option value="subtract" selected>Вычитание (-)</option>
-                }
-                else
-                {
-                    <option value="subtract">Вычитание (-)</option>
-                }
-
-                @if (ViewBag.Operation == "multiply")
-                {
-                    <option value="multiply" selected>Умножение (×)</option>
-                }
-                else
-                {
-                    <option value="multiply">Умножение (×)</option>
-                }
-
-                @if (ViewBag.Operation == "divide")
-                {
-                    <option value="divide" selected>Деление (÷)</option>
-                }
-                else
-                {
-                    <option value="divide">Деление (÷)</option>
-                }
-
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="num2">Второе число:</label>
-            <input type="number"
-                   step="any"
-                   name="num2"
-                   id="num2"
-                   class="form-control"
-                   value="@ViewBag.Num2"
-                   required />
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-            Выполнить расчёт
-        </button>
-    </form>
-
-    @if (ViewBag.Result != null)
-    {
-        <div class="alert alert-success mt-4">
-            <strong>Результат:</strong> @ViewBag.Result
-        </div>
+<style>
+    body {
+        background: #f4f7fb;
     }
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger mt-4">
-            @ViewBag.Error
-        </div>
+    .calculator-page {
+        min-height: calc(100vh - 130px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
     }
+
+    .calculator-card {
+        width: 100%;
+        max-width: 620px;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .calculator-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .calculator-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        background: #0d6efd;
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .calculator-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .calculator-header p {
+        margin: 8px 0 0;
+        color: #6b7280;
+        font-size: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .form-control,
+    .form-select {
+        min-height: 48px;
+        border: 1px solid #d9dee7;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 16px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.12);
+    }
+
+    .calculate-button {
+        width: 100%;
+        min-height: 50px;
+        margin-top: 6px;
+        border: none;
+        border-radius: 10px;
+        background: #0d6efd;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .calculate-button:hover {
+        background: #0b5ed7;
+    }
+
+    .calculate-button:active {
+        transform: translateY(1px);
+    }
+
+    .result-box {
+        margin-top: 28px;
+        padding: 20px;
+        border-radius: 12px;
+        background: #e9f7ef;
+        border: 1px solid #b7e4c7;
+        text-align: center;
+    }
+
+    .result-label {
+        color: #198754;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .result-value {
+        color: #146c43;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .error-box {
+        margin-top: 28px;
+        padding: 16px;
+        border-radius: 12px;
+        background: #fff0f1;
+        border: 1px solid #f5c2c7;
+        color: #842029;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .calculation-hint {
+        margin-top: 18px;
+        text-align: center;
+        color: #9ca3af;
+        font-size: 13px;
+    }
+
+    @@media (max-width: 576px) {
+        .calculator-page {
+            padding: 20px 12px;
+        }
+
+        .calculator-card {
+            padding: 28px 20px;
+            border-radius: 16px;
+        }
+
+        .calculator-header h1 {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<div class="calculator-page">
+    <div class="calculator-card">
+
+        <div class="calculator-header">
+            <div class="calculator-icon">±</div>
+
+            <h1>Калькулятор</h1>
+
+        </div>
+
+        <form asp-controller="Calculator"
+              asp-action="Calculate"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="num1">Первое число</label>
+
+                <input type="number"
+                       step="any"
+                       name="num1"
+                       id="num1"
+                       class="form-control"
+                       value="@ViewBag.Num1"
+                       placeholder="Введите число"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="operation">Операция</label>
+
+                <select name="operation"
+                        id="operation"
+                        class="form-select">
+
+                    @if (ViewBag.Operation == "add")
+                    {
+                        <option value="add" selected>Сложение (+)</option>
+                    }
+                    else
+                    {
+                        <option value="add">Сложение (+)</option>
+                    }
+
+                    @if (ViewBag.Operation == "subtract")
+                    {
+                        <option value="subtract" selected>Вычитание (−)</option>
+                    }
+                    else
+                    {
+                        <option value="subtract">Вычитание (−)</option>
+                    }
+
+                    @if (ViewBag.Operation == "multiply")
+                    {
+                        <option value="multiply" selected>Умножение (×)</option>
+                    }
+                    else
+                    {
+                        <option value="multiply">Умножение (×)</option>
+                    }
+
+                    @if (ViewBag.Operation == "divide")
+                    {
+                        <option value="divide" selected>Деление (÷)</option>
+                    }
+                    else
+                    {
+                        <option value="divide">Деление (÷)</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="num2">Второе число</label>
+
+                <input type="number"
+                       step="any"
+                       name="num2"
+                       id="num2"
+                       class="form-control"
+                       value="@ViewBag.Num2"
+                       placeholder="Введите число"
+                       required />
+            </div>
+
+            <button type="submit" class="calculate-button">
+                Выполнить расчёт
+            </button>
+
+        </form>
+
+        @if (ViewBag.Result != null)
+        {
+            <div class="result-box">
+                <div class="result-label">Результат</div>
+                <div class="result-value">@ViewBag.Result</div>
+            </div>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error-box">
+                @ViewBag.Error
+            </div>
+        }
+
+        <div class="calculation-hint">
+            Поддерживаются сложение, вычитание, умножение и деление
+        </div>
+
+    </div>
 </div>
