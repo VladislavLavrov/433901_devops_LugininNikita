@@ -17,6 +17,10 @@ namespace Calculator.Controllers
             double num2,
             string operation)
         {
+            ViewBag.Num1 = num1;
+            ViewBag.Num2 = num2;
+            ViewBag.Operation = operation;
+
             double result;
 
             switch (operation)

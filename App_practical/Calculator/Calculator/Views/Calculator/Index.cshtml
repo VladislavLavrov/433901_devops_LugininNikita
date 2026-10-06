@@ -18,6 +18,7 @@
                    name="num1"
                    id="num1"
                    class="form-control"
+                   value="@ViewBag.Num1"
                    required />
         </div>
 
@@ -27,10 +28,41 @@
                     id="operation"
                     class="form-select">
 
-                <option value="add">Сложение (+)</option>
-                <option value="subtract">Вычитание (-)</option>
-                <option value="multiply">Умножение (×)</option>
-                <option value="divide">Деление (÷)</option>
+                @if (ViewBag.Operation == "add")
+                {
+                    <option value="add" selected>Сложение (+)</option>
+                }
+                else
+                {
+                    <option value="add">Сложение (+)</option>
+                }
+
+                @if (ViewBag.Operation == "subtract")
+                {
+                    <option value="subtract" selected>Вычитание (-)</option>
+                }
+                else
+                {
+                    <option value="subtract">Вычитание (-)</option>
+                }
+
+                @if (ViewBag.Operation == "multiply")
+                {
+                    <option value="multiply" selected>Умножение (×)</option>
+                }
+                else
+                {
+                    <option value="multiply">Умножение (×)</option>
+                }
+
+                @if (ViewBag.Operation == "divide")
+                {
+                    <option value="divide" selected>Деление (÷)</option>
+                }
+                else
+                {
+                    <option value="divide">Деление (÷)</option>
+                }
 
             </select>
         </div>
@@ -42,11 +74,12 @@
                    name="num2"
                    id="num2"
                    class="form-control"
+                   value="@ViewBag.Num2"
                    required />
         </div>
 
         <button type="submit" class="btn btn-primary">
-            Рассчитать
+            Выполнить расчёт
         </button>
     </form>
 
