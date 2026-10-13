@@ -1,6 +1,7 @@
 ﻿using Calculator.Data;
 using Calculator.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Calculator.Controllers
 {
@@ -77,5 +78,16 @@ namespace Calculator.Controllers
 
             return View("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> History()
+        {
+            var calculations = await _context.Calculations
+                .OrderByDescending(c => c.Id)
+                .ToListAsync();
+
+            return View(calculations);
+        }
     }
+
 }
