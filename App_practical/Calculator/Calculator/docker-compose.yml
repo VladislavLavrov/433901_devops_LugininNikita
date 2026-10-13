@@ -29,7 +29,7 @@ services:
       ASPNETCORE_URLS: http://+:5006
       ConnectionStrings__DefaultConnection: "Server=mariadb;Port=3306;Database=calculator_db;User=calculator_user;Password=calculator_password;"
     ports:
-      - "5006:5006"
+      - "5066:5006"
     depends_on:
       mariadb:
         condition: service_healthy
