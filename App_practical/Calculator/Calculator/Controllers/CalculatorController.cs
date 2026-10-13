@@ -1,9 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Calculator.Data;
+using Calculator.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Calculator.Controllers
 {
     public class CalculatorController : Controller
     {
+        private readonly CalculatorDbContext _context;
+
+        public CalculatorController(CalculatorDbContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -12,7 +21,7 @@ namespace Calculator.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Calculate(
+        public async Task<IActionResult> Calculate(
             double num1,
             double num2,
             string operation)
@@ -51,6 +60,18 @@ namespace Calculator.Controllers
                     ViewBag.Error = "Неизвестная операция.";
                     return View("Index");
             }
+
+            var calculation = new Calculation
+            {
+                FirstNumber = num1,
+                SecondNumber = num2,
+                Operation = operation,
+                Result = result,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Calculations.Add(calculation);
+            await _context.SaveChangesAsync();
 
             ViewBag.Result = result;
 
