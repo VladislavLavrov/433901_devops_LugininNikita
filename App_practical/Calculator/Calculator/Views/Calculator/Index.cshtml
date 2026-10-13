@@ -17,7 +17,6 @@
 
             <div class="form-group">
                 <label for="num1">Первое число</label>
-
                 <input type="number"
                        step="any"
                        name="num1"
@@ -30,7 +29,6 @@
 
             <div class="form-group">
                 <label for="operation">Операция</label>
-
                 <select name="operation"
                         id="operation"
                         class="form-select">
@@ -54,13 +52,11 @@
                             selected="@(ViewBag.Operation?.ToString() == "divide")">
                         Деление (÷)
                     </option>
-
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="num2">Второе число</label>
-
                 <input type="number"
                        step="any"
                        name="num2"
@@ -74,7 +70,6 @@
             <button type="submit" class="calculate-button">
                 Выполнить расчёт
             </button>
-
         </form>
 
         ViewBag.Result != null
